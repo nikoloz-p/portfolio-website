@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Project - {{ project.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Edit Project</h1>
+
+    <!-- Edit Project Form -->
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="update_project" value="1">
+
+        <label for="title">Project Title:</label>
+        <input type="text" name="title" value="{{ project.title }}" required>
+
+        <label for="description">Project Description:</label>
+        <textarea name="description">{{ project.description }}</textarea>
+
+        <label for="main_image">Upload Main Image:</label>
+        <input type="file" name="main_image">
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <h2>Project Sections</h2>
+
+    <ul>
+        {% for section in project.sections|sort(attribute='order') %}
+            <li>
+                {% if section.type == "text" %}
+                    <p>{{ section.content }}</p>
+                {% elif section.type == "image" %}
+                    <img src="{{ url_for('static', filename=section.content) }}" alt="Project Image" width="100">
+                {% elif section.type =="subtitle" %}
+                    <p>{{ section.content }}</p>
+                {% elif section.type =="image_row"%}
+                    <p>IMAGE ROW</p>
+                {% endif %}
+                <form method="POST" action="{{ url_for('delete_section', project_id=project.id, section_id=section.id) }}">
+                    <button type="submit">🗑 Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add Section Form -->
+    <h2>Add New Section</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="add_section" value="1">
+
+        <label for="type">Section Type:</label>
+        <select name="type" required>
+            <option value="text">Text</option>
+            <option value="image">Single Image</option>
+            <option value="image_row">Image Row</option>
+            <option value="subtitle">Subtitle</option>
+        </select>
+
+        <!-- Text Content -->
+        <label for="content">Text Content (if applicable):</label>
+        <textarea name="content"></textarea>
+
+        <!-- Upload Single Image -->
+        <label for="image">Upload Image (if applicable):</label>
+        <input type="file" name="image">
+
+        <!-- Upload Multiple Images for Image Row -->
+        <label for="image_row">Upload Images (for Image Row):</label>
+        <input type="file" name="image_row" multiple>
+
+        <label for="order">Order:</label>
+        <input type="number" name="order" required>
+
+        <button type="submit">➕ Add Section</button>
+    </form>
+
+    <a href="{{ url_for('admin') }}">⬅ Back to Admin</a>
+</body>
+</html>

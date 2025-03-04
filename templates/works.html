@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nini Vacharadze | Works</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header_inner">
+            <h1 class="header_title">
+                <a href="{{url_for('home')}}">Nini Vacharadze</a>
+            </h1>
+            <nav class="header_nav">
+                <ul class="nav_list">
+                    <li class="nav_list_item"><a href="{{url_for('works')}}">about</a></li>
+                    <li class="nav_list_item"><a href="{{url_for('works')}}">Works</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="works_main">
+        <div class="works_container">
+            {% for project in projects %}
+            <div class="work_holder">
+                <span class="work_number">{{loop.index}}</span>
+                <a href="{{url_for('project_detail', project_id=project.id)}}" class="work">
+                    <img src="{{url_for('static', filename=project.image)}}" alt="{{project.title}}">
+                </a>
+                <h3 class="work_title">
+                    {{project.title}}
+                </h3>
+                <span class="work_desc">
+                    {{project.description}}
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

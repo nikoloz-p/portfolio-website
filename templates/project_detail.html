@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nini Vacharadze | {{project.title}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header_inner">
+            <h1 class="header_title">
+                <a href="{{url_for('home')}}">Nini Vacharadze</a>
+            </h1>
+            <nav class="header_nav">
+                <ul class="nav_list">
+                    <li class="nav_list_item"><a href="{{url_for('works')}}">about</a></li>
+                    <li class="nav_list_item"><a href="{{url_for('works')}}">Works</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="project_main">
+        <div class="project_header">
+            <div class="project_img_holder">
+                <img src="{{ url_for('static', filename=project.image) }}" alt="{{ project.title }}" class="project_main_image">
+            </div>
+            <h2 class="project_main_title">
+                {{project.title}}
+            </h2>
+            <h3 class="project_main_description">{{ project.description }}</h3>
+            <div class="project_inner_details">
+                <ul class="project_inner_details-list">
+                    <li>Project: Floral Café & Boutique</li>
+                    <li>Location: Gràcia, Barcelona</li>
+                    <li>Area: 150 sq.m.</li>
+                    <li>Designer: Nini Vacharadze</li>
+                </ul>
+            </div>
+            <ul class="project_navigation">
+                <li>about</li>
+                <li>concept</li>
+                <li>current state</li>
+                <li>distribution</li>
+                <li>inspiration</li>
+                <li>plans</li>
+                <li>isometric</li>
+                <li>renders</li>
+            </ul>
+            <p class="project_header_text">
+                The audience of Floral Café & Boutique are modern urbanites seeking a place of tranquility and inspiration.
+                They appreciate nature, good design, and artisanal coffee. 
+                These visitors are creative souls—lovers of plants, flowers, and spaces filled with life and authenticity. 
+                They are drawn to places that tell a story and offer a multi-sensory experience where they can connect with beauty and unwind from the city’s buzz
+            </p>
+        </div>
+        <div class="project_content">
+            {% for section in project.sections|sort(attribute='order') %}
+                <div class="project-section {% if section.type == 'image' %}image-section{% elif section.type == 'image_row' %}image-row-section{% else %}text-section{% endif %}">
+                    {% if section.type == "text" %}
+                        <p>{{ section.content }}</p>
+                    {% elif section.type == "image" %}
+                        <div class="project_img_holder">
+                            <img src="{{ url_for('static', filename=section.content) }}" alt="Project Image">
+                        </div>
+                    {% elif section.type == "image_row" %}
+                        <div class="gallery-container">
+                            {% for image in section.content.split(',') %}
+                                <div class="gallery-image">
+                                    <img src="{{ url_for('static', filename=image) }}" alt="Gallery Image">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% elif section.type == "subtitle" %}
+                        <h3 class="project_subtitle">{{ section.content }}</h3>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <footer class="footer project_detail_footer">
+        <div class="footer_inner">
+            <h2 class="footer_text">&COPY;2025 Nini Vacharadze</h2>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
